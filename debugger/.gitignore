@@ -4,3 +4,6 @@
 /build/
 /.idea/workspace.xml
 
+.idea/modules/
+src/main/kotlin/
+src/test/
