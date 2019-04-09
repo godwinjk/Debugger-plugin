@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.godwin.ui.SessionWindow">
+  <grid id="27dc6" binding="container" layout-manager="CardLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties>
+      <preferredSize width="1024" height="512"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <splitpane id="99a85" binding="jSplitPane">
+        <constraints>
+          <card name="Card1"/>
+        </constraints>
+        <properties>
+          <orientation value="1"/>
+          <resizeWeight value="0.8"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <scrollpane id="30fe9" binding="jScrollTree">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="427d1" class="javax.swing.JTree" binding="tableTree">
+                <constraints/>
+                <properties>
+                  <enabled value="true"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <scrollpane id="6e6a2" binding="jScrollTable">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="d619f" binding="jInnerContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints/>
+                <properties>
+                  <preferredSize width="400" height="200"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <grid id="ef3e2" binding="jRightContainer" layout-manager="CardLayout" hgap="0" vgap="0">
+                    <constraints border-constraint="Center"/>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="5430d" binding="jBottomControl" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints border-constraint="South"/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="c86d0" class="javax.swing.JButton" binding="btnSubmit">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="Submit"/>
+                        </properties>
+                      </component>
+                      <hspacer id="f0ba2">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+            </children>
+          </scrollpane>
+        </children>
+      </splitpane>
+    </children>
+  </grid>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor" id="6e6a2"/>
+  </inspectionSuppressions>
+</form>
