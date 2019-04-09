@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.godwin.ui.MainWindowWidget">
-  <grid id="27dc6" binding="container" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-    <margin top="3" left="3" bottom="3" right="3"/>
+  <grid id="27dc6" binding="container" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
@@ -9,12 +8,16 @@
     <border type="none"/>
     <children>
       <component id="f9010" class="javax.swing.JList" binding="deviceList">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-        </constraints>
+        <constraints border-constraint="Center"/>
         <properties/>
+      </component>
+      <component id="71674" class="javax.swing.JLabel" binding="lbInfo">
+        <constraints border-constraint="North"/>
+        <properties>
+          <horizontalAlignment value="0"/>
+          <horizontalTextPosition value="0"/>
+          <text value="Connect Android phone"/>
+        </properties>
       </component>
     </children>
   </grid>

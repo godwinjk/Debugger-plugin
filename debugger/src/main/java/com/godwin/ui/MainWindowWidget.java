@@ -24,6 +24,7 @@ import java.util.List;
 public class MainWindowWidget {
     private JPanel container;
     private JList deviceList;
+    private JLabel lbInfo;
 
     private Project mProject;
     private Disposable parent;
@@ -69,7 +70,7 @@ public class MainWindowWidget {
 
         @Override
         public void onConnectClient(ClientSocket socket) {
-//            runDeviceDetection();
+            runDeviceDetection();
         }
     };
 
@@ -77,7 +78,9 @@ public class MainWindowWidget {
         this.mProject = mProject;
         this.parent = parent;
 
-        runDeviceDetection();
+        this.lbInfo.setText("<html>Connect a phone and start debugging. <br><a href=https://github.com/godwinjk/Debugger-plugin>How to use?</a></html>");
+
+//        runDeviceDetection();
         beautify();
         deviceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -136,6 +139,9 @@ public class MainWindowWidget {
                 sockets.add(socket);
             }
         }
+
+        lbInfo.setVisible(applications.size() <= 0);
+
         deviceList.setListData(applications.toArray());
     }
 

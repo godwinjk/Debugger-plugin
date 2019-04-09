@@ -4,6 +4,10 @@ import com.godwin.adb.DeviceDetectionService;
 import com.godwin.ui.DebugWidget;
 import com.godwin.ui.IDebugWidget;
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationListener;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -28,6 +32,7 @@ import javax.swing.*;
 public class DebugComponent implements ProjectComponent {
     private final Project myProject;
     private final String TAG = getClass().getSimpleName();
+    private boolean isShown = false;
 
     protected DebugComponent(Project project) {
         this.myProject = project;
@@ -88,12 +93,19 @@ public class DebugComponent implements ProjectComponent {
             @Override
             public void stateChanged() {
                 ToolWindow toolWindow = ToolWindowManager.getInstance(myProject).getToolWindow(DebugToolWindowFactory.TOOL_WINDOW_ID);
-
                 if (toolWindow != null) {
-
                     if (toolWindow.isVisible() && toolWindow.getContentManager().getContentCount() == 0) {
-//                        Logger.d(TAG, "DebuggerComponent.isVisible ContentCount>0");
                         initParser(toolWindow);
+                    } else if (!toolWindow.isVisible()) {
+                        if (!isShown ) {
+                            isShown = true;
+                            Notifications.Bus.notify(new Notification(
+                                    "Database Debugger",
+                                    "Like it",
+                                    "Like this plugin? <a href=https://paypal.me/godwinj>Donate</a> or <b>Give it a star</b>  <a href=https://plugins.jetbrains.com/plugin/10650-json-parser>Json Parser</a> and spread the word",
+                                    NotificationType.INFORMATION,
+                                    new NotificationListener.UrlOpeningListener(true)));
+                        }
                     }
                 }
             }
