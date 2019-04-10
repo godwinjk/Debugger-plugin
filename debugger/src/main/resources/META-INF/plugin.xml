@@ -1,22 +1,32 @@
 <idea-plugin>
-    <id>com.godwin.debugger</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <id>com.godwin.android_debugger</id>
+    <name>Android Database Debugger</name>
+    <vendor email="godwinjoseph.k@gmail.com">Godwin Joseph</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    Exporting database from an Android phone and using an extra tool to debug is a heavy task, isn't it?
+    Why don't you use  <b>Android Database Debugger</b>, that will help that task inside Android Studio?
+    <br><b>Android Database Debugger</b> is a simple lightweight plugin for IntelliJ IDE and Android Studio.
+    This will improve the time for debugging database.<br> Install and spread the word :)<br>
     ]]></description>
 
+    <change-notes><![CDATA[
+      <h2>Version 1.0</h1>
+      <ul>
+            <li>Listing devices</li>
+            <li>Auto suggest keywords</li>
+            <li>Only querying is working</li>
+      </ul>
+    ]]></change-notes>
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
     <depends>com.intellij.modules.java</depends>
-    <depends>com.intellij.modules.gradle.java</depends>
     <depends>org.jetbrains.android</depends>
 
+    <idea-version since-build="173.0"/>
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <toolWindow id="Debugger" anchor="right"

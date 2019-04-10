@@ -1,6 +1,5 @@
 package com.godwin;
 
-import com.godwin.adb.DeviceDetectionService;
 import com.godwin.ui.DebugWidget;
 import com.godwin.ui.IDebugWidget;
 import com.intellij.ide.util.PropertiesComponent;
@@ -49,8 +48,6 @@ public class DebugComponent implements ProjectComponent {
         ((ToolWindowManagerEx) ToolWindowManager.getInstance(myProject)).addToolWindowManagerListener(getToolWindowListener());
 
 
-        DeviceDetectionService.getInstance().setDaemonRunning(true);
-        DeviceDetectionService.getInstance().startDetecting(myProject);
     }
 
     private Content createParserContentPanel(ToolWindow toolWindow) {
@@ -97,16 +94,17 @@ public class DebugComponent implements ProjectComponent {
                     if (toolWindow.isVisible() && toolWindow.getContentManager().getContentCount() == 0) {
                         initParser(toolWindow);
                     } else if (!toolWindow.isVisible()) {
-                        if (!isShown ) {
+                        if (!isShown) {
                             isShown = true;
                             Notifications.Bus.notify(new Notification(
                                     "Database Debugger",
                                     "Like it",
-                                    "Like this plugin? <a href=https://paypal.me/godwinj>Donate</a> or <b>Give it a star</b>  <a href=https://plugins.jetbrains.com/plugin/10650-json-parser>Json Parser</a> and spread the word",
+                                    "Like this plugin? <a href=https://paypal.me/godwinj>Donate</a> or <b>Give it a star</b>  <a href=https://plugins.jetbrains.com/plugin/10766-database-debugger>Android Database Debugger</a> and spread the word",
                                     NotificationType.INFORMATION,
                                     new NotificationListener.UrlOpeningListener(true)));
                         }
                     }
+
                 }
             }
         };

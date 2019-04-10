@@ -57,6 +57,12 @@ public class DataObserver {
         }
     }
 
+    public void publishApplication(ClientSocket socket) {
+        for (int i = 0; i < mListeners.size(); i++) {
+            DataCommunicationListener listener = mListeners.get(i);
+            listener.onGetAppData(socket);
+        }
+    }
     public void publish(List<DDatabase> databases) {
         for (int i = 0; i < mListeners.size(); i++) {
             DataCommunicationListener listener = mListeners.get(i);

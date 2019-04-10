@@ -27,7 +27,7 @@ class ClientManager : MessageContract {
                 TcpCallbackSubscriber.publishOnMessage(clientMessage, this)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+//            e.printStackTrace()
             TcpCallbackSubscriber.publishOnClosed(this)
         }
     }
@@ -42,7 +42,7 @@ class ClientManager : MessageContract {
             ThreadPoolProvider.executeBackGroundTask(runnable)
 
         } catch (e: Exception) {
-            e.printStackTrace()
+//            e.printStackTrace()
             mSocket = null
         }
     }

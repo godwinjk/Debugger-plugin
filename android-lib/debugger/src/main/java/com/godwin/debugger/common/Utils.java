@@ -39,10 +39,9 @@ public class Utils {
 
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] array = stream.toByteArray();
 
         return HexConversionHelper.bytesToHex(array);
     }
-
 }

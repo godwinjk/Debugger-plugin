@@ -1,14 +1,13 @@
 package com.godwin.network;
 
 
-import com.godwin.adb.AdbCommandExecutor;
 import com.godwin.common.Logger;
-import com.godwin.network.godwin.communication.CommunicationListener;
-import com.godwin.network.godwin.communication.MessageContract;
 import com.godwin.network.communication.CommunicationService;
 import com.godwin.network.communication.DataCommunicationListener;
 import com.godwin.network.communication.DataObserver;
 import com.godwin.network.communication.ResponseManager;
+import com.godwin.network.godwin.communication.CommunicationListener;
+import com.godwin.network.godwin.communication.MessageContract;
 import com.godwin.network.godwin.communication.TcpCallbackSubscriber;
 import com.godwin.network.godwin.server.ServerManager;
 import com.godwin.network.godwin.util.Error;
@@ -24,15 +23,12 @@ public class NetworkConnectionManager implements CommunicationListener {
     private static final Object MUTEX = new Object();
     private static NetworkConnectionManager sManager;
     private final String TAG = getClass().getSimpleName();
-    private AdbCommandExecutor mExecutor;
     private boolean isRunning = true;
 
     private DataCommunicationListener mListener;
 
     private NetworkConnectionManager() {
-        ServerManager.INSTANCE.startServer(PortAllocationManager.getInstance().getPort(0));
         //prevent object creation
-        mExecutor = new AdbCommandExecutor();
         TcpCallbackSubscriber.INSTANCE.subscribe(this);
     }
 
@@ -48,6 +44,14 @@ public class NetworkConnectionManager implements CommunicationListener {
             }
         }
         return sManager;
+    }
+
+    public void startServer() {
+        ServerManager.INSTANCE.startServer(PortAllocationManager.getInstance().getAllocatedPort());
+    }
+
+    public void stopServer() {
+        ServerManager.INSTANCE.stopServer();
     }
 
     private void addToRegistry(MessageContract socket) {

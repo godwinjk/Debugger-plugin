@@ -1,9 +1,11 @@
 package com.godwin.ui;
 
 
+import com.godwin.adb.DeviceDetectionService;
 import com.godwin.model.DApplication;
 import com.godwin.model.DDatabase;
 import com.godwin.network.ClientSocket;
+import com.godwin.network.NetworkConnectionManager;
 import com.godwin.network.SocketPool;
 import com.godwin.network.communication.DataCommunicationListener;
 import com.godwin.network.communication.DataObserver;
@@ -11,8 +13,14 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +29,7 @@ import java.util.List;
  *
  * @author : Godwin Joseph Kurinjikattu
  */
-public class MainWindowWidget {
+public class MainWindowWidget implements DataCommunicationListener,MouseListener {
     private JPanel container;
     private JList deviceList;
     private JLabel lbInfo;
@@ -36,51 +44,85 @@ public class MainWindowWidget {
     private ClientSocket mSelectSocket;
 
 
-    DataCommunicationListener listener = new DataCommunicationListener() {
-        @Override
-        public void onGetDbData(List<DDatabase> databaseList) {
+    @Override
+    public void onGetAppData(ClientSocket socket) {
+        runDeviceDetection();
+    }
 
-        }
+    @Override
+    public void onGetDbData(List<DDatabase> databaseList) {
 
-        @Override
-        public void onGetTableDetails(List<List<String>> table, List<String> header) {
+    }
 
-        }
+    @Override
+    public void onGetTableDetails(List<List<String>> table, List<String> header) {
 
-        @Override
-        public void onGetQueryResult(List<List<String>> table, List<String> header) {
+    }
 
-        }
+    @Override
+    public void onGetQueryResult(List<List<String>> table, List<String> header) {
 
-        @Override
-        public void onGetQueryFail(int errorCode, String errorMessage) {
+    }
 
-        }
+    @Override
+    public void onGetQueryFail(int errorCode, String errorMessage) {
 
-        @Override
-        public void onCloseClient(ClientSocket socket) {
-            if (mSelectSocket != null && socket != null) {
-                if (mSelectSocket.getSocket().getUid() == socket.getSocket().getUid()) {
-                    if (mSessionWindow != null) {
-                        mSessionWindow.close();
-                    }
+    }
+
+    @Override
+    public void onCloseClient(ClientSocket socket) {
+        if (mSelectSocket != null && socket != null) {
+            if (mSelectSocket.getSocket().getUid() == socket.getSocket().getUid()) {
+                if (mSessionWindow != null) {
+                    mSessionWindow.close();
                 }
             }
         }
+    }
 
-        @Override
-        public void onConnectClient(ClientSocket socket) {
-            runDeviceDetection();
+    @Override
+    public void onConnectClient(ClientSocket socket) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/godwinjk/Debugger-plugin/blob/master/README.md"));
+        } catch (IOException | URISyntaxException e1) {
+            e1.printStackTrace();
         }
-    };
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
 
     public MainWindowWidget(Project mProject, Disposable parent) {
         this.mProject = mProject;
         this.parent = parent;
 
-        this.lbInfo.setText("<html>Connect a phone and start debugging. <br><a href=https://github.com/godwinjk/Debugger-plugin>How to use?</a></html>");
+        runDeviceDetection();
 
-//        runDeviceDetection();
+        this.lbInfo.setText("<html>Connect a phone and start debugging. <br><a href=https://github.com/godwinjk/Debugger-plugin>How to use?</a></html>");
+        this.lbInfo.addMouseListener(this);
+
         beautify();
         deviceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -106,7 +148,13 @@ public class MainWindowWidget {
                 });
             }
         });
-        DataObserver.getInstance().subscribe(listener);
+        DataObserver.getInstance().subscribe(this);
+        startService();
+    }
+
+    private void startService() {
+        NetworkConnectionManager.getInstance().startServer();
+        DeviceDetectionService.getInstance().startDetecting(mProject);
     }
 
     private void beautify() {

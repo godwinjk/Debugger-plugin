@@ -4,7 +4,8 @@ package com.godwin.network.communication;
 import com.godwin.common.Common;
 import com.godwin.model.DDatabase;
 import com.godwin.model.DTable;
-import com.google.gson.JsonObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Godwin on 5/4/2018 6:02 PM for plugin.
@@ -15,51 +16,76 @@ class RequestManagerImpl implements RequestManager {
 
     @Override
     public String getDeviceDetails() {
-        JsonObject object = new JsonObject();
-        object.addProperty(Common.REQUEST_TYPE, Common.REQUEST_APP_DETAILS);
+        JSONObject object = new JSONObject();
+        try {
+            object.put(Common.REQUEST_TYPE, Common.REQUEST_APP_DETAILS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return object.toString();
     }
 
     @Override
     public String getDbRequest() {
-        JsonObject object = new JsonObject();
-        object.addProperty(Common.REQUEST_TYPE, Common.REQUEST_DB);
+        JSONObject object = new JSONObject();
+        try {
+            object.put(Common.REQUEST_TYPE, Common.REQUEST_DB);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return object.toString();
     }
 
     @Override
     public String getTableRequest() {
-        JsonObject object = new JsonObject();
-        object.addProperty(Common.REQUEST_TYPE, Common.REQUEST_TABLE);
+        JSONObject object = new JSONObject();
+        try {
+            object.put(Common.REQUEST_TYPE, Common.REQUEST_TABLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return object.toString();
     }
 
     @Override
     public String getTableDetailsRequest(DTable table) {
-        JsonObject object = new JsonObject();
-        object.addProperty(Common.REQUEST_TYPE, Common.REQUEST_TABLE_DETAILS);
-        object.addProperty(Common.KEY_TABLE_NAME, table.getName());
-        object.addProperty(Common.KEY_DB_NAME, table.getDatabaseName());
+        JSONObject object = new JSONObject();
+        try {
+            object.put(Common.REQUEST_TYPE, Common.REQUEST_TABLE);
+            object.put(Common.REQUEST_TYPE, Common.REQUEST_TABLE_DETAILS);
+            object.put(Common.KEY_TABLE_NAME, table.getName());
+            object.put(Common.KEY_DB_NAME, table.getDatabaseName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         return object.toString();
     }
 
     @Override
     public String getExecuteQueryRequest(DDatabase database, String query) {
-        JsonObject object = new JsonObject();
-
-        object.addProperty(Common.REQUEST_TYPE, Common.REQUEST_EXECUTE_QUERY);
-        object.addProperty(Common.KEY_DB_NAME, database.getName());
-        object.addProperty(Common.KEY_QUERY, query);
+        JSONObject object = new JSONObject();
+        try {
+            object.put(Common.REQUEST_TYPE, Common.REQUEST_EXECUTE_QUERY);
+            object.put(Common.KEY_DB_NAME, database.getName());
+            object.put(Common.KEY_QUERY, query);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return object.toString();
     }
 
     @Override
     public String getCloseRequest() {
-        JsonObject object = new JsonObject();
-        object.addProperty(Common.REQUEST_TYPE, Common.REQUEST_CLOSE);
+       JSONObject object =new JSONObject();
+        try {
+            object.put(Common.REQUEST_TYPE, Common.REQUEST_CLOSE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return object.toString();
     }
 }

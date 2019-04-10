@@ -1,5 +1,6 @@
 package com.godwin.network.godwin.server
 
+import com.godwin.common.Logger
 import com.godwin.network.godwin.communication.TcpCallbackSubscriber
 import com.godwin.network.godwin.worker.ThreadPoolProvider
 import java.net.ServerSocket
@@ -12,13 +13,25 @@ object ServerManager {
 
     fun startServer(port: Int) {
         ThreadPoolProvider.executeBackGroundTask(Runnable {
-            if (null == serverSocket) {
-                serverSocket = ServerSocket(port)
-            }
-            serverSocket!!.reuseAddress = true
-            startListeningForClient()
-        })
+            try {
+                if (null == serverSocket) {
+                    serverSocket = ServerSocket(port)
 
+                    serverSocket!!.reuseAddress = true
+
+                    startListeningForClient()
+                }
+            }catch (e: Exception){
+                Logger.e(e.message)
+            }
+        })
+    }
+
+    fun stopServer() {
+        if (serverSocket != null || !serverSocket!!.isClosed) {
+            serverSocket!!.close()
+            serverSocket = null
+        }
     }
 
     private fun startListeningForClient() {

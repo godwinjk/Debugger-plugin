@@ -12,6 +12,8 @@ import java.util.List;
  * @author : Godwin Joseph Kurinjikattu
  */
 public interface DataCommunicationListener {
+    void onGetAppData(ClientSocket socket);
+
     void onGetDbData(List<DDatabase> databaseList);
 
     void onGetTableDetails(List<List<String>> table, List<String> header);

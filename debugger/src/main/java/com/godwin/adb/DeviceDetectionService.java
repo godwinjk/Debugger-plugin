@@ -19,6 +19,7 @@ public class DeviceDetectionService implements Runnable {
 
     private Project myProject;
     private final AdbCommandExecutor executor;
+    private Thread mThread;
 
     private DeviceDetectionService() {
         //prevent object creation
@@ -36,18 +37,22 @@ public class DeviceDetectionService implements Runnable {
 
     public void startDetecting(Project myProject) {
         this.myProject = myProject;
-        Thread thread = new Thread(this);
-        thread.start();
+        isDaemonRunning = true;
+        mThread = new Thread(this);
+        mThread.start();
+    }
+
+    public void stopDetecting() {
+        isDaemonRunning = false;
     }
 
     @Override
     public void run() {
-        while (isDaemonRunning()) {
-
+        while (isDaemonRunning) {
             String deviceList = executor.adbDevicesWithAllValue(myProject);
             List<DDevice> devices = AdbDeviceSupport.getDeviceList(deviceList);
             if (devices != null && devices.size() > 0) {
-                int allocated = PortAllocationManager.getInstance().getPort(0);
+                int allocated = PortAllocationManager.getInstance().getAllocatedPort();
                 executor.adbPortReverse(myProject, allocated, allocated);
                 break;
             }
@@ -57,13 +62,5 @@ public class DeviceDetectionService implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    public boolean isDaemonRunning() {
-        return isDaemonRunning;
-    }
-
-    public void setDaemonRunning(boolean daemonRunning) {
-        isDaemonRunning = daemonRunning;
     }
 }

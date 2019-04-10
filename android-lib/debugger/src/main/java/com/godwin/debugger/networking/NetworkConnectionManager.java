@@ -7,9 +7,8 @@ import com.godwin.debugger.networking.communication.ResponseManager;
 import com.godwin.debugger.networking.godwin.client.ClientManager;
 import com.godwin.debugger.networking.godwin.communication.MessageContract;
 import com.godwin.debugger.networking.godwin.communication.TcpCallbackSubscriber;
-import com.godwin.network.godwin.communication.CommunicationListener;
+import com.godwin.debugger.networking.godwin.communication.CommunicationListener;
 import com.godwin.debugger.networking.godwin.util.Error;
-import com.godwin.network.godwin.worker.ThreadPoolProvider;
 
 import java.util.Timer;
 import java.util.TimerTask;

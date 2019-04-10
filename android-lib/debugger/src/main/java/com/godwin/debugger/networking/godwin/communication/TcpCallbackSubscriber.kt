@@ -1,6 +1,5 @@
 package com.godwin.debugger.networking.godwin.communication
 
-import com.godwin.network.godwin.communication.CommunicationListener
 import java.util.*
 
 /**

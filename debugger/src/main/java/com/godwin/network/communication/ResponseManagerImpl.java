@@ -8,10 +8,10 @@ import com.godwin.model.DDatabase;
 import com.godwin.model.DTable;
 import com.godwin.network.ClientSocket;
 import com.godwin.network.SocketPool;
-import gherkin.deps.com.google.gson.JsonArray;
-import gherkin.deps.com.google.gson.JsonElement;
-import gherkin.deps.com.google.gson.JsonObject;
-import gherkin.deps.com.google.gson.JsonParser;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,49 +25,54 @@ import java.util.List;
 class ResponseManagerImpl implements ResponseManager {
     @Override
     public void processResponse(MessageContract socket, String response) {
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(response);
 
-        JsonObject object = element.getAsJsonObject();
-        int responseCode = object.get(Common.RESPONSE_TYPE).getAsInt();
+        JSONObject object = null;
+        try {
+            object = new JSONObject(response);
 
-        switch (responseCode) {
-            case Common.REQUEST_APP_DETAILS:
-                processGetAppDetails(socket, object);
-                break;
-            case Common.REQUEST_DB:
-                processDatabase(socket, object);
-                break;
-            case Common.REQUEST_TABLE_DETAILS:
-                processTableDetails(socket, object);
-                break;
-            case Common.REQUEST_EXECUTE_QUERY:
-                processQuery(socket, object);
-                break;
+
+            int responseCode = object.optInt(Common.RESPONSE_TYPE);
+
+            switch (responseCode) {
+                case Common.REQUEST_APP_DETAILS:
+                    processGetAppDetails(socket, object);
+                    break;
+                case Common.REQUEST_DB:
+                    processDatabase(socket, object);
+                    break;
+                case Common.REQUEST_TABLE_DETAILS:
+                    processTableDetails(socket, object);
+                    break;
+                case Common.REQUEST_EXECUTE_QUERY:
+                    processQuery(socket, object);
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    private void processDatabase(MessageContract socket, JsonObject object) {
+    private void processDatabase(MessageContract socket, JSONObject object) throws JSONException {
 
-        int responseCode = object.get(Common.RESPONSE_TYPE).getAsInt();
+        int responseCode = object.optInt(Common.RESPONSE_TYPE);
 
-        JsonArray array = object.get(Common.KEY_DATA).getAsJsonArray();
+        JSONArray array = object.optJSONArray(Common.KEY_DATA);
         List<DDatabase> databases = new ArrayList<>();
-        for (int i = 0; i < array.size(); i++) {
-            JsonObject dbObject = array.get(i).getAsJsonObject();
-            String dbName = dbObject.get(Common.KEY_DB_NAME).getAsString();
-            String dbPath = dbObject.get(Common.KEY_DB_PATH).getAsString();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject dbObject = array.optJSONObject(i);
+            String dbName = dbObject.optString(Common.KEY_DB_NAME);
+            String dbPath = dbObject.optString(Common.KEY_DB_PATH);
 
             DDatabase database = new DDatabase();
             database.setName(dbName);
             database.setUri(dbPath);
 
             List<DTable> tables = new ArrayList<>();
-            JsonArray tblArray = dbObject.get(Common.KEY_TABLES).getAsJsonArray();
-            for (int j = 0; j < tblArray.size(); j++) {
-                JsonObject tableObject = tblArray.get(j).getAsJsonObject();
+            JSONArray tblArray = dbObject.optJSONArray(Common.KEY_TABLES);
+            for (int j = 0; j < tblArray.length(); j++) {
+                JSONObject tableObject = tblArray.optJSONObject(j);
 
-                String tableName = tableObject.get(Common.KEY_TABLE_NAME).getAsString();
+                String tableName = tableObject.optString(Common.KEY_TABLE_NAME);
                 DTable table = new DTable();
                 table.setDatabaseName(dbName);
                 table.setName(tableName);
@@ -79,13 +84,13 @@ class ResponseManagerImpl implements ResponseManager {
         DataObserver.getInstance().publish(databases);
     }
 
-    private void processGetAppDetails(MessageContract socket, JsonObject object) {
-        int responseCode = object.get(Common.RESPONSE_TYPE).getAsInt();
+    private void processGetAppDetails(MessageContract socket, JSONObject object) throws JSONException {
+        int responseCode = object.optInt(Common.RESPONSE_TYPE);
 
-        String packageName = object.get(Common.KEY_PKG).getAsString();
-        String name = object.get(Common.KEY_NAME).getAsString();
-        String version = object.get(Common.KEY_VERSION).getAsString();
-        String base64Icon = object.get(Common.KEY_ICON).getAsString();
+        String packageName = object.optString(Common.KEY_PKG);
+        String name = object.optString(Common.KEY_NAME);
+        String version = object.optString(Common.KEY_VERSION);
+        String base64Icon = object.optString(Common.KEY_ICON);
 
         DApplication application = new DApplication();
         application.setPackageName(packageName);
@@ -97,20 +102,21 @@ class ResponseManagerImpl implements ResponseManager {
         if (null != clientSocket) {
             clientSocket.setApplication(application);
         }
+        DataObserver.getInstance().publishApplication(clientSocket);
     }
 
-    private void processTableDetails(MessageContract socket, JsonObject object) {
-        int responseCode = object.get(Common.RESPONSE_TYPE).getAsInt();
+    private void processTableDetails(MessageContract socket, JSONObject object) throws JSONException {
+        int responseCode = object.optInt(Common.RESPONSE_TYPE);
 
-        JsonArray array = object.get(Common.KEY_DATA).getAsJsonArray();
+        JSONArray array = object.optJSONArray(Common.KEY_DATA);
         List<String> header = new ArrayList<>();
         List<List<String>> table = new ArrayList<>();
-        for (int i = 0; i < array.size(); i++) {
-            JsonObject rowObject = array.get(i).getAsJsonObject();
-            JsonArray rowArray = rowObject.getAsJsonArray(Common.KEY_ROW);
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject rowObject = array.optJSONObject(i);
+            JSONArray rowArray = rowObject.optJSONArray(Common.KEY_ROW);
             List<String> row = new ArrayList<>();
-            for (int j = 0; j < rowArray.size(); j++) {
-                String data = rowArray.get(j).getAsString();
+            for (int j = 0; j < rowArray.length(); j++) {
+                String data = rowArray.optString(j);
                 row.add(data);
             }
             table.add(row);
@@ -120,21 +126,21 @@ class ResponseManagerImpl implements ResponseManager {
         DataObserver.getInstance().publishTable(table, header);
     }
 
-    private void processQuery(MessageContract socket, JsonObject object) {
-        int responseCode = object.get(Common.RESPONSE_TYPE).getAsInt();
+    private void processQuery(MessageContract socket, JSONObject object) throws JSONException {
+        int responseCode = object.optInt(Common.RESPONSE_TYPE);
 
-        JsonElement dataElement = object.get(Common.KEY_DATA);
-        JsonElement errorElement = object.get(Common.KEY_ERR);
-        if (dataElement != null) {
-            JsonArray array = dataElement.getAsJsonArray();
+        JSONArray array = object.optJSONArray(Common.KEY_DATA);
+        JSONObject errorElement = object.optJSONObject(Common.KEY_ERR);
+        if (array != null) {
+
             List<String> header = new ArrayList<>();
             List<List<String>> table = new ArrayList<>();
-            for (int i = 0; i < array.size(); i++) {
-                JsonObject rowObject = array.get(i).getAsJsonObject();
-                JsonArray rowArray = rowObject.getAsJsonArray(Common.KEY_ROW);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject rowObject = array.optJSONObject(i);
+                JSONArray rowArray = rowObject.optJSONArray(Common.KEY_ROW);
                 List<String> row = new ArrayList<>();
-                for (int j = 0; j < rowArray.size(); j++) {
-                    String data = rowArray.get(j).getAsString();
+                for (int j = 0; j < rowArray.length(); j++) {
+                    String data = rowArray.optString(j);
                     row.add(data);
                 }
                 table.add(row);
@@ -143,8 +149,7 @@ class ResponseManagerImpl implements ResponseManager {
             table.remove(0);
             DataObserver.getInstance().publishQueryResult(table, header);
         } else if (errorElement != null) {
-            JsonObject errorObject = errorElement.getAsJsonObject();
-            DataObserver.getInstance().publishQueryFail(errorObject.get(Common.KEY_ERR_CODE).getAsInt(), errorObject.get(Common.KEY_ERR_MSG).getAsString());
+            DataObserver.getInstance().publishQueryFail(errorElement.optInt(Common.KEY_ERR_CODE), errorElement.optString(Common.KEY_ERR_MSG));
         }
     }
 }

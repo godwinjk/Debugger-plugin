@@ -60,6 +60,11 @@ public class SessionWindow implements KeyEventPostProcessor {
 
     private DataCommunicationListener listener = new DataCommunicationListener() {
         @Override
+        public void onGetAppData(ClientSocket socket) {
+
+        }
+
+        @Override
         public void onGetDbData(List<DDatabase> databaseList) {
             DefaultMutableTreeNode root = new DefaultMutableTreeNode(socket.getApplication());
 

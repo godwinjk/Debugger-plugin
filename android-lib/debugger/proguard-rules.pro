@@ -21,3 +21,8 @@
 #-renamesourcefileattribute SourceFile
 
 -keep public class Debugger
+-keepclassmembers class * implements android.os.Parcelable {
+    static ** CREATOR;
+}
+-keepattributes Exceptions, InnerClasses, Signature
+

@@ -1,8 +1,6 @@
 package com.godwin.ui;
 
 
-import com.godwin.adb.DeviceDetectionService;
-import com.godwin.network.NetworkConnectionManager;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBPanel;
@@ -43,9 +41,6 @@ public class DebugWidget extends JPanel implements IDebugWidget {
     }
 
     private JComponent createInnerDebuggerWidget() {
-        DeviceDetectionService.getInstance().startDetecting(mProject);
-        NetworkConnectionManager.getInstance();
-
         return new MainWindowWidget(mProject, mParent).getContainer();
     }
 

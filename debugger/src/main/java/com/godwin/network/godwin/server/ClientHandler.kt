@@ -1,5 +1,6 @@
 package com.godwin.network.godwin.server
 
+import com.godwin.common.Logger
 import com.godwin.network.godwin.communication.MessageContract
 import com.godwin.network.godwin.communication.TcpCallbackSubscriber
 import com.godwin.network.godwin.util.SharedUidGenerator
@@ -36,7 +37,8 @@ class ClientHandler(socket: Socket) : Runnable, MessageContract {
                 TcpCallbackSubscriber.publishOnMessage(clientMessage, this)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Logger.e(e.message)
+            TcpCallbackSubscriber.publishOnClosed(this)
         }
     }
 
