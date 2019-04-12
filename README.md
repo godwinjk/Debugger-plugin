@@ -7,28 +7,20 @@ Database Debugger is a debug bridge for Android applications. When enabled, deve
 #### In Android Studio
 1. File-> Settings-> Plugins
 2. Click *Browse repositories*
-3. Search **Database Debugger**
+3. Search **Android Database Debugger**
 4. Install and restart Android Studio
 
 Or you can find the file from https://plugins.jetbrains.com/plugin/10766-database-debugger
 
-Now you will see a tool window on right tool panel called **Database Debugger**.
+Now you will see a tool window on right tool panel called **Debugger**.
 
 #### In application
 
-1. Download the latest JARs or grab via Gradle:
+1. Download the latest JARs from Release folder and copy to lib folder of your app (create one if you dont have)
 
-`implementation 'com.github.godwinjoseph-wisilica:debugger:1.0.1'`
-or Maven:
+`implementation fileTree(dir: 'lib', include: ['*.aar', '*.jar'], exclude: [])`
 
-```
-<dependency>
-  <groupId>com.github.godwinjoseph-wisilica</groupId>
-  <artifactId>debugger</artifactId>
-  <version>1.0.1</version>
-  <type>pom</type>
-</dependency>
-```
+Maven and Jcenter is on the way
 
 # Using
 
